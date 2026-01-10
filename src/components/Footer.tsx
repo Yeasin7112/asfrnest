@@ -1,6 +1,7 @@
 import logo from "@/assets/asfrnest-logo.png";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Shield } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -53,9 +54,15 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm">
             © 2025 Asfrnest Solutions. {t("allRightsReserved")}
           </p>
-          <p className="text-muted-foreground text-sm">
-            {t("builtWith")}
-          </p>
+          <div className="flex items-center gap-4">
+            <Link to="/auth" className="flex items-center gap-1 text-muted-foreground hover:text-primary text-sm transition-colors">
+              <Shield className="w-4 h-4" />
+              Admin
+            </Link>
+            <p className="text-muted-foreground text-sm">
+              {t("builtWith")}
+            </p>
+          </div>
         </div>
       </div>
     </footer>
