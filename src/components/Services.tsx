@@ -10,10 +10,16 @@ import {
   ArrowRight 
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import OrderModal from "./OrderModal";
 
 const Services = () => {
   const [activeCategory, setActiveCategory] = useState("all");
-  const { t } = useLanguage();
+  const [orderModal, setOrderModal] = useState<{ isOpen: boolean; serviceName: string; servicePrice: string }>({
+    isOpen: false,
+    serviceName: "",
+    servicePrice: "",
+  });
+  const { t, language } = useLanguage();
 
   const categories = [
     { id: "all", name: t("allServices") },
@@ -102,6 +108,10 @@ const Services = () => {
     ? services 
     : services.filter(s => s.category === activeCategory);
 
+  const handleOrderClick = (serviceName: string, servicePrice: string) => {
+    setOrderModal({ isOpen: true, serviceName, servicePrice: `${t("from")} ${servicePrice}` });
+  };
+
   return (
     <section id="services" className="py-24 relative">
       <div className="container mx-auto px-4">
@@ -157,7 +167,10 @@ const Services = () => {
                 
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <span className="text-primary font-semibold">{t("from")} {service.price}</span>
-                  <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-accent transition-colors">
+                  <button 
+                    onClick={() => handleOrderClick(service.title, service.price)}
+                    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-accent transition-colors"
+                  >
                     {t("orderNow")} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -166,6 +179,13 @@ const Services = () => {
           })}
         </div>
       </div>
+
+      <OrderModal
+        isOpen={orderModal.isOpen}
+        onClose={() => setOrderModal({ ...orderModal, isOpen: false })}
+        serviceName={orderModal.serviceName}
+        servicePrice={orderModal.servicePrice}
+      />
     </section>
   );
 };
