@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/asfrnest-logo.png";
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const navLinks = [
-    { name: "Services", href: "#services" },
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "Why Us", href: "#why-us" },
-    { name: "Testimonials", href: "#testimonials" },
+    { name: t("services"), href: "#services" },
+    { name: t("whyUs"), href: "#why-us" },
+    { name: t("testimonials"), href: "#testimonials" },
   ];
 
   return (
@@ -24,7 +26,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
-                key={link.name}
+                key={link.href}
                 href={link.href}
                 className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
               >
@@ -34,11 +36,12 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <LanguageToggle />
             <a
               href="#submit-problem"
               className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm"
             >
-              Get Help Now
+              {t("getHelpNow")}
             </a>
           </div>
 
@@ -57,7 +60,7 @@ const Navbar = () => {
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
@@ -65,12 +68,15 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
+              <div className="py-2">
+                <LanguageToggle />
+              </div>
               <a
                 href="#submit-problem"
                 onClick={() => setIsOpen(false)}
                 className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-lg text-center text-sm mt-2"
               >
-                Get Help Now
+                {t("getHelpNow")}
               </a>
             </div>
           </div>
