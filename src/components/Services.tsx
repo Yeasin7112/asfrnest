@@ -9,92 +9,94 @@ import {
   Users,
   ArrowRight 
 } from "lucide-react";
-
-const categories = [
-  { id: "all", name: "All Services" },
-  { id: "development", name: "Development" },
-  { id: "gifts", name: "Custom Gifts" },
-  { id: "mobile", name: "Mobile Solutions" },
-  { id: "consulting", name: "Consulting" },
-];
-
-const services = [
-  {
-    id: 1,
-    title: "App Development",
-    description: "Custom Android & web apps built for your unique needs",
-    icon: Smartphone,
-    price: "From ₹4,999",
-    category: "development",
-    popular: true,
-  },
-  {
-    id: 2,
-    title: "Website Design",
-    description: "Modern, responsive websites that convert visitors",
-    icon: Globe,
-    price: "From ₹2,999",
-    category: "development",
-    popular: false,
-  },
-  {
-    id: 3,
-    title: "Custom Software",
-    description: "Tailored solutions for your business automation",
-    icon: Code,
-    price: "From ₹9,999",
-    category: "development",
-    popular: false,
-  },
-  {
-    id: 4,
-    title: "AI Tools & Automation",
-    description: "Smart AI-powered tools to boost your productivity",
-    icon: Bot,
-    price: "From ₹1,999",
-    category: "development",
-    popular: true,
-  },
-  {
-    id: 5,
-    title: "Birthday Website Gift",
-    description: "Surprise your loved ones with a personalized web page",
-    icon: Gift,
-    price: "From ₹999",
-    category: "gifts",
-    popular: true,
-  },
-  {
-    id: 6,
-    title: "Anniversary & Love Pages",
-    description: "Create memorable digital gifts for special moments",
-    icon: Gift,
-    price: "From ₹999",
-    category: "gifts",
-    popular: false,
-  },
-  {
-    id: 7,
-    title: "Phone Problem Fix",
-    description: "Software issues, setup, guidance – all mobile problems",
-    icon: Wrench,
-    price: "From ₹299",
-    category: "mobile",
-    popular: false,
-  },
-  {
-    id: 8,
-    title: "Tech Consulting",
-    description: "Expert guidance for startups, students & freelancers",
-    icon: Users,
-    price: "From ₹499",
-    category: "consulting",
-    popular: false,
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Services = () => {
   const [activeCategory, setActiveCategory] = useState("all");
+  const { t } = useLanguage();
+
+  const categories = [
+    { id: "all", name: t("allServices") },
+    { id: "development", name: t("development") },
+    { id: "gifts", name: t("customGifts") },
+    { id: "mobile", name: t("mobileSolutions") },
+    { id: "consulting", name: t("consulting") },
+  ];
+
+  const services = [
+    {
+      id: 1,
+      title: t("appDev"),
+      description: t("appDevDesc"),
+      icon: Smartphone,
+      price: "৳4,999",
+      category: "development",
+      popular: true,
+    },
+    {
+      id: 2,
+      title: t("webDesign"),
+      description: t("webDesignDesc"),
+      icon: Globe,
+      price: "৳2,999",
+      category: "development",
+      popular: false,
+    },
+    {
+      id: 3,
+      title: t("customSoftware"),
+      description: t("customSoftwareDesc"),
+      icon: Code,
+      price: "৳9,999",
+      category: "development",
+      popular: false,
+    },
+    {
+      id: 4,
+      title: t("aiTools"),
+      description: t("aiToolsDesc"),
+      icon: Bot,
+      price: "৳1,999",
+      category: "development",
+      popular: true,
+    },
+    {
+      id: 5,
+      title: t("birthdayGift"),
+      description: t("birthdayGiftDesc"),
+      icon: Gift,
+      price: "৳999",
+      category: "gifts",
+      popular: true,
+    },
+    {
+      id: 6,
+      title: t("anniversaryGift"),
+      description: t("anniversaryGiftDesc"),
+      icon: Gift,
+      price: "৳999",
+      category: "gifts",
+      popular: false,
+    },
+    {
+      id: 7,
+      title: t("phoneFix"),
+      description: t("phoneFixDesc"),
+      icon: Wrench,
+      price: "৳299",
+      category: "mobile",
+      popular: false,
+    },
+    {
+      id: 8,
+      title: t("techConsulting"),
+      description: t("techConsultingDesc"),
+      icon: Users,
+      price: "৳499",
+      category: "consulting",
+      popular: false,
+    },
+  ];
 
   const filteredServices = activeCategory === "all" 
     ? services 
@@ -106,10 +108,10 @@ const Services = () => {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Smart <span className="gradient-text">Service Marketplace</span>
+            <span className="gradient-text">{t("servicesTitle")}</span>
           </h2>
           <p className="text-muted-foreground">
-            Pick a service, get it done. No complexity, just solutions.
+            {t("servicesSubtitle")}
           </p>
         </div>
 
@@ -142,7 +144,7 @@ const Services = () => {
               >
                 {service.popular && (
                   <div className="absolute top-4 right-4 px-2 py-1 bg-accent/20 text-accent text-xs font-medium rounded-full">
-                    Popular
+                    {t("popular")}
                   </div>
                 )}
                 
@@ -154,9 +156,9 @@ const Services = () => {
                 <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
                 
                 <div className="flex items-center justify-between pt-4 border-t border-border">
-                  <span className="text-primary font-semibold">{service.price}</span>
+                  <span className="text-primary font-semibold">{t("from")} {service.price}</span>
                   <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-accent transition-colors">
-                    Order Now <ArrowRight className="w-4 h-4" />
+                    {t("orderNow")} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>

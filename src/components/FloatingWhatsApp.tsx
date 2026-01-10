@@ -1,9 +1,12 @@
 import { MessageCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const FloatingWhatsApp = () => {
+  const { t } = useLanguage();
+
   return (
     <a
-      href="https://wa.me/919876543210"
+      href="https://wa.me/8801XXXXXXXXX"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 group"
@@ -19,7 +22,7 @@ const FloatingWhatsApp = () => {
 
         {/* Tooltip */}
         <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-2 bg-card border border-border rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          <span className="text-sm font-medium">Stuck? Chat with us!</span>
+          <span className="text-sm font-medium">{t("stuck")}</span>
         </div>
       </div>
     </a>
