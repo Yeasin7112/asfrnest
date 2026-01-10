@@ -1,13 +1,21 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, Send, Sparkles, CheckCircle, X, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import type { User } from "@supabase/supabase-js";
 
 const ProblemSubmit = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
   const [formData, setFormData] = useState({
     problemType: "",
     description: "",
@@ -121,6 +129,7 @@ const ProblemSubmit = () => {
           contact: formData.contact,
           urgency: formData.urgency,
           screenshot_url: screenshotUrl,
+          user_id: user?.id || null,
         });
 
       if (error) throw error;

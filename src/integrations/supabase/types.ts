@@ -25,6 +25,7 @@ export type Database = {
           status: string
           updated_at: string
           urgency: string
+          user_id: string | null
         }
         Insert: {
           contact: string
@@ -36,6 +37,7 @@ export type Database = {
           status?: string
           updated_at?: string
           urgency?: string
+          user_id?: string | null
         }
         Update: {
           contact?: string
@@ -47,6 +49,7 @@ export type Database = {
           status?: string
           updated_at?: string
           urgency?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -61,6 +64,7 @@ export type Database = {
           service_price: string | null
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -72,6 +76,7 @@ export type Database = {
           service_price?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -83,6 +88,7 @@ export type Database = {
           service_price?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }

@@ -1,12 +1,29 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, User } from "lucide-react";
 import logo from "@/assets/asfrnest-logo.png";
 import LanguageToggle from "./LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const navLinks = [
     { name: t("services"), href: "#services" },
@@ -37,6 +54,23 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-4">
             <LanguageToggle />
+            {user ? (
+              <a
+                href="/dashboard"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-lg hover:bg-secondary/80 transition-colors text-sm"
+              >
+                <User className="w-4 h-4" />
+                Dashboard
+              </a>
+            ) : (
+              <a
+                href="/auth"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-lg hover:bg-secondary/80 transition-colors text-sm"
+              >
+                <User className="w-4 h-4" />
+                Login
+              </a>
+            )}
             <a
               href="#submit-problem"
               className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm"
@@ -71,6 +105,25 @@ const Navbar = () => {
               <div className="py-2">
                 <LanguageToggle />
               </div>
+              {user ? (
+                <a
+                  href="/dashboard"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm"
+                >
+                  <User className="w-4 h-4" />
+                  Dashboard
+                </a>
+              ) : (
+                <a
+                  href="/auth"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm"
+                >
+                  <User className="w-4 h-4" />
+                  Login
+                </a>
+              )}
               <a
                 href="#submit-problem"
                 onClick={() => setIsOpen(false)}

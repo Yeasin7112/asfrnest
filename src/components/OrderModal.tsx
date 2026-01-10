@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Send, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import type { User } from "@supabase/supabase-js";
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -14,12 +15,19 @@ interface OrderModalProps {
 const OrderModal = ({ isOpen, onClose, serviceName, servicePrice }: OrderModalProps) => {
   const { language } = useLanguage();
   const { toast } = useToast();
+  const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
     customerName: "",
     mobileNumber: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
 
   const translations = {
     orderService: { en: "Order Service", bn: "সেবা অর্ডার করুন" },
@@ -48,6 +56,7 @@ const OrderModal = ({ isOpen, onClose, serviceName, servicePrice }: OrderModalPr
           mobile_number: formData.mobileNumber,
           service_name: serviceName,
           service_price: servicePrice,
+          user_id: user?.id || null,
         });
 
       if (error) throw error;
