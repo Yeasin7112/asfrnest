@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import logo from "@/assets/asfrnest-logo.png";
 
 const Auth = () => {
@@ -12,7 +13,47 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { language } = useLanguage();
   const navigate = useNavigate();
+
+  const translations = {
+    login: { en: "Login", bn: "লগইন" },
+    signup: { en: "Create Account", bn: "অ্যাকাউন্ট তৈরি করুন" },
+    loginSubtitle: { en: "Sign in to track your orders and submissions", bn: "আপনার অর্ডার এবং সমস্যা ট্র্যাক করতে সাইন ইন করুন" },
+    signupSubtitle: { en: "Create an account to track your orders", bn: "আপনার অর্ডার ট্র্যাক করতে অ্যাকাউন্ট তৈরি করুন" },
+    email: { en: "Email", bn: "ইমেইল" },
+    password: { en: "Password", bn: "পাসওয়ার্ড" },
+    signIn: { en: "Sign In", bn: "সাইন ইন" },
+    signUp: { en: "Sign Up", bn: "সাইন আপ" },
+    pleaseWait: { en: "Please wait...", bn: "অপেক্ষা করুন..." },
+    noAccount: { en: "Don't have an account? Sign up", bn: "অ্যাকাউন্ট নেই? সাইন আপ করুন" },
+    haveAccount: { en: "Already have an account? Sign in", bn: "অ্যাকাউন্ট আছে? সাইন ইন করুন" },
+    backHome: { en: "← Back to home", bn: "← হোমে ফিরুন" },
+  };
+
+  const t = (key: keyof typeof translations) => translations[key][language];
+
+  useEffect(() => {
+    // Check if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        checkAndRedirect(session.user.id);
+      }
+    });
+  }, []);
+
+  const checkAndRedirect = async (userId: string) => {
+    const { data: isAdmin } = await supabase.rpc('has_role', {
+      _user_id: userId,
+      _role: 'admin'
+    });
+
+    if (isAdmin) {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,30 +69,15 @@ const Auth = () => {
         if (error) throw error;
 
         if (data.user) {
-          // Check if user is admin
-          const { data: roleData } = await supabase.rpc('has_role', {
-            _user_id: data.user.id,
-            _role: 'admin'
-          });
-
-          if (roleData) {
-            toast({ title: "Welcome back!", description: "Logged in successfully." });
-            navigate("/admin");
-          } else {
-            toast({ 
-              title: "Access Denied", 
-              description: "You don't have admin access.",
-              variant: "destructive" 
-            });
-            await supabase.auth.signOut();
-          }
+          toast({ title: "Welcome back!", description: "Logged in successfully." });
+          await checkAndRedirect(data.user.id);
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/admin`,
+            emailRedirectTo: `${window.location.origin}/dashboard`,
           },
         });
 
@@ -68,11 +94,13 @@ const Auth = () => {
           throw error;
         }
 
-        toast({
-          title: "Account created!",
-          description: "Please login with your credentials.",
-        });
-        setIsLogin(true);
+        if (data.user) {
+          toast({
+            title: "Account created!",
+            description: "You're now logged in.",
+          });
+          navigate("/dashboard");
+        }
       }
     } catch (error: any) {
       console.error("Auth error:", error);
@@ -94,16 +122,16 @@ const Auth = () => {
         <div className="text-center mb-8">
           <img src={logo} alt="Asfrnest Solutions" className="h-16 mx-auto mb-4" />
           <h1 className="text-2xl font-display font-bold">
-            {isLogin ? "Admin Login" : "Create Account"}
+            {isLogin ? t("login") : t("signup")}
           </h1>
           <p className="text-muted-foreground text-sm mt-2">
-            {isLogin ? "Sign in to access the admin dashboard" : "Register a new account"}
+            {isLogin ? t("loginSubtitle") : t("signupSubtitle")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="gradient-border rounded-2xl p-6 bg-card space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
+            <label className="block text-sm font-medium mb-2">{t("email")}</label>
             <input
               type="email"
               value={email}
@@ -115,7 +143,7 @@ const Auth = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
+            <label className="block text-sm font-medium mb-2">{t("password")}</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -142,7 +170,7 @@ const Auth = () => {
             className="w-full py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {isLogin ? <LogIn className="w-5 h-5" /> : <UserPlus className="w-5 h-5" />}
-            {isLoading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
+            {isLoading ? t("pleaseWait") : isLogin ? t("signIn") : t("signUp")}
           </button>
 
           <div className="text-center pt-4 border-t border-border">
@@ -151,14 +179,14 @@ const Auth = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
-              {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              {isLogin ? t("noAccount") : t("haveAccount")}
             </button>
           </div>
         </form>
 
         <div className="text-center mt-6">
           <a href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-            ← Back to home
+            {t("backHome")}
           </a>
         </div>
       </div>
