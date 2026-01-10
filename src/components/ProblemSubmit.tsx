@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Upload, Send, Sparkles, CheckCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { Upload, Send, Sparkles, CheckCircle, X, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 const ProblemSubmit = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     problemType: "",
     description: "",
@@ -15,6 +16,9 @@ const ProblemSubmit = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(false);
 
   const problemTypes = [
     { key: "appSoftwareIssue", value: "App/Software Issue" },
@@ -25,11 +29,90 @@ const ProblemSubmit = () => {
     { key: "other", value: "Other" },
   ];
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload an image file (PNG, JPG, etc.)",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please upload an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  const removeFile = () => {
+    setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please upload an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      let screenshotUrl: string | null = null;
+
+      // Upload screenshot if selected
+      if (selectedFile) {
+        setUploadProgress(true);
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('problem-screenshots')
+          .upload(fileName, selectedFile);
+
+        if (uploadError) {
+          console.error("Upload error:", uploadError);
+          throw new Error("Failed to upload screenshot");
+        }
+
+        const { data: urlData } = supabase.storage
+          .from('problem-screenshots')
+          .getPublicUrl(fileName);
+
+        screenshotUrl = urlData.publicUrl;
+        setUploadProgress(false);
+      }
+
       const { error } = await supabase
         .from("problem_submissions")
         .insert({
@@ -37,12 +120,14 @@ const ProblemSubmit = () => {
           description: formData.description,
           contact: formData.contact,
           urgency: formData.urgency,
+          screenshot_url: screenshotUrl,
         });
 
       if (error) throw error;
 
       setSubmitted(true);
       setFormData({ problemType: "", description: "", contact: "", urgency: "normal" });
+      removeFile();
       
       toast({
         title: t("problemSubmitted"),
@@ -59,6 +144,7 @@ const ProblemSubmit = () => {
       });
     } finally {
       setIsLoading(false);
+      setUploadProgress(false);
     }
   };
 
@@ -129,10 +215,45 @@ const ProblemSubmit = () => {
                 {/* Upload */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium mb-3">{t("attachScreenshots")}</label>
-                  <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
-                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">{t("clickOrDrag")}</p>
-                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  
+                  {previewUrl ? (
+                    <div className="relative border border-border rounded-xl overflow-hidden">
+                      <img 
+                        src={previewUrl} 
+                        alt="Preview" 
+                        className="w-full h-48 object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeFile}
+                        className="absolute top-2 right-2 p-1.5 bg-destructive text-destructive-foreground rounded-full hover:opacity-90 transition-opacity"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      <div className="absolute bottom-2 left-2 px-3 py-1 bg-background/80 backdrop-blur-sm rounded-lg text-xs flex items-center gap-1">
+                        <Image className="w-3 h-3" />
+                        {selectedFile?.name}
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      onClick={() => fileInputRef.current?.click()}
+                      onDrop={handleDrop}
+                      onDragOver={(e) => e.preventDefault()}
+                      className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-primary/50 transition-colors cursor-pointer"
+                    >
+                      <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">{t("clickOrDrag")}</p>
+                      <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Urgency */}
@@ -182,7 +303,7 @@ const ProblemSubmit = () => {
                   className="w-full py-4 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <Send className="w-5 h-5" />
-                  {isLoading ? t("submitting") : t("submitProblem")}
+                  {isLoading ? (uploadProgress ? "Uploading..." : t("submitting")) : t("submitProblem")}
                 </button>
               </>
             )}
