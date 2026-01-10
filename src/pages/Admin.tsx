@@ -10,7 +10,8 @@ import {
   Clock,
   X,
   Phone,
-  Mail
+  Mail,
+  Image
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/asfrnest-logo.png";
@@ -24,6 +25,7 @@ interface ProblemSubmission {
   urgency: string;
   status: string;
   created_at: string;
+  screenshot_url: string | null;
 }
 
 interface ServiceOrder {
@@ -287,6 +289,24 @@ const Admin = () => {
                     </div>
                   </div>
                   <p className="text-foreground mb-4">{problem.description}</p>
+                  {problem.screenshot_url && (
+                    <div className="mb-4">
+                      <a 
+                        href={problem.screenshot_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                      >
+                        <Image className="w-4 h-4" />
+                        View Screenshot
+                      </a>
+                      <img 
+                        src={problem.screenshot_url} 
+                        alt="Problem screenshot" 
+                        className="mt-2 max-w-sm rounded-lg border border-border"
+                      />
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => updateProblemStatus(problem.id, "in_progress")}

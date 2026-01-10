@@ -21,6 +21,7 @@ export type Database = {
           description: string
           id: string
           problem_type: string
+          screenshot_url: string | null
           status: string
           updated_at: string
           urgency: string
@@ -31,6 +32,7 @@ export type Database = {
           description: string
           id?: string
           problem_type: string
+          screenshot_url?: string | null
           status?: string
           updated_at?: string
           urgency?: string
@@ -41,6 +43,7 @@ export type Database = {
           description?: string
           id?: string
           problem_type?: string
+          screenshot_url?: string | null
           status?: string
           updated_at?: string
           urgency?: string
