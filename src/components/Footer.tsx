@@ -33,17 +33,17 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">{t("contactUs")}</h4>
             <div className="space-y-3">
-              <a href="mailto:hello@asfrnest.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
+              <a href="mailto:asfrnest@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
                 <Mail className="w-4 h-4" />
-                hello@asfrnest.com
+                asfrnest@gmail.com
               </a>
-              <a href="tel:+8801XXXXXXXXX" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
+              <a href="tel:+8801734916497" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
                 <Phone className="w-4 h-4" />
-                +880 1XXX-XXXXXX
+                +8801734916497
               </a>
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
                 <MapPin className="w-4 h-4" />
-                {t("india")}
+                {t("Barisal Sadar")}
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2025 Asfrnest Solutions. {t("allRightsReserved")}
+            © 2026 Asfrnest Solutions. {t("allRightsReserved")}
           </p>
           <div className="flex items-center gap-4">
             <Link to="/auth" className="flex items-center gap-1 text-muted-foreground hover:text-primary text-sm transition-colors">
