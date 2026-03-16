@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import logo from "@/assets/asfrnest-logo.png";
+import logo from "@/assets/yasdev-logo.png";
 import type { User } from "@supabase/supabase-js";
 
 interface ProblemSubmission {
@@ -53,16 +53,16 @@ const Dashboard = () => {
   const translations = {
     dashboard: { en: "My Dashboard", bn: "আমার ড্যাশবোর্ড" },
     myOrders: { en: "My Orders", bn: "আমার অর্ডার" },
-    myProblems: { en: "My Submissions", bn: "আমার সমস্যা" },
+    myProblems: { en: "My Submissions", bn: "আমার জমা দেওয়া সমস্যা" },
     noOrders: { en: "You haven't placed any orders yet.", bn: "আপনি এখনও কোনো অর্ডার দেননি।" },
     noProblems: { en: "You haven't submitted any problems yet.", bn: "আপনি এখনও কোনো সমস্যা জমা দেননি।" },
-    status: { en: "Status", bn: "স্থিতি" },
+    status: { en: "Status", bn: "অবস্থা" },
     pending: { en: "Pending", bn: "অপেক্ষমাণ" },
-    inProgress: { en: "In Progress", bn: "চলমান" },
+    inProgress: { en: "In Progress", bn: "কাজ চলছে" },
     completed: { en: "Completed", bn: "সম্পন্ন" },
     cancelled: { en: "Cancelled", bn: "বাতিল" },
     logout: { en: "Logout", bn: "লগআউট" },
-    backHome: { en: "Back to Home", bn: "হোমে ফিরুন" },
+    backHome: { en: "Back to Home", bn: "হোমে যান" },
     refresh: { en: "Refresh", bn: "রিফ্রেশ" },
   };
 
@@ -158,7 +158,7 @@ const Dashboard = () => {
       <header className="border-b border-border bg-card/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src={logo} alt="Asfrnest" className="h-10" />
+            <img src={logo} alt="YasDev" className="h-10" />
             <span className="text-sm text-muted-foreground">{t("dashboard")}</span>
           </div>
           <div className="flex items-center gap-3">
@@ -239,7 +239,7 @@ const Dashboard = () => {
                       <h3 className="font-semibold text-lg text-primary">{order.service_name}</h3>
                       <p className="text-sm text-muted-foreground">{order.service_price}</p>
                       <p className="text-xs text-muted-foreground mt-2">
-                        {new Date(order.created_at).toLocaleString()}
+                        {new Date(order.created_at).toLocaleString("bn-BD")}
                       </p>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
@@ -272,7 +272,7 @@ const Dashboard = () => {
                         {problem.problem_type}
                       </span>
                       <p className="text-xs text-muted-foreground mt-2">
-                        {new Date(problem.created_at).toLocaleString()}
+                        {new Date(problem.created_at).toLocaleString("bn-BD")}
                       </p>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${getStatusColor(problem.status)}`}>
@@ -290,7 +290,7 @@ const Dashboard = () => {
                         className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
                       >
                         <Image className="w-4 h-4" />
-                        View Screenshot
+                        স্ক্রিনশট দেখুন
                       </a>
                     </div>
                   )}

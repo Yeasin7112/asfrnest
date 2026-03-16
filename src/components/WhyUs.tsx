@@ -1,4 +1,4 @@
-import { IndianRupee, MessageCircle, Heart, Zap } from "lucide-react";
+import { Wallet, MessageCircle, Heart, Zap } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const WhyUs = () => {
@@ -6,7 +6,7 @@ const WhyUs = () => {
 
   const reasons = [
     {
-      icon: IndianRupee,
+      icon: Wallet,
       title: t("dontOvercharge"),
       description: t("dontOverchargeDesc"),
     },
