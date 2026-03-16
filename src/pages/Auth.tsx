@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import logo from "@/assets/asfrnest-logo.png";
+import logo from "@/assets/yasdev-logo.png";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,24 +17,23 @@ const Auth = () => {
   const navigate = useNavigate();
 
   const translations = {
-    login: { en: "Login", bn: "লগইন" },
-    signup: { en: "Create Account", bn: "অ্যাকাউন্ট তৈরি করুন" },
-    loginSubtitle: { en: "Sign in to track your orders and submissions", bn: "আপনার অর্ডার এবং সমস্যা ট্র্যাক করতে সাইন ইন করুন" },
-    signupSubtitle: { en: "Create an account to track your orders", bn: "আপনার অর্ডার ট্র্যাক করতে অ্যাকাউন্ট তৈরি করুন" },
+    login: { en: "Login", bn: "লগইন করুন" },
+    signup: { en: "Create Account", bn: "নতুন অ্যাকাউন্ট তৈরি করুন" },
+    loginSubtitle: { en: "Sign in to track your orders and submissions", bn: "আপনার অর্ডার ও সমস্যার আপডেট দেখতে লগইন করুন" },
+    signupSubtitle: { en: "Create an account to track your orders", bn: "অর্ডারের আপডেট পেতে অ্যাকাউন্ট তৈরি করুন" },
     email: { en: "Email", bn: "ইমেইল" },
     password: { en: "Password", bn: "পাসওয়ার্ড" },
-    signIn: { en: "Sign In", bn: "সাইন ইন" },
-    signUp: { en: "Sign Up", bn: "সাইন আপ" },
+    signIn: { en: "Sign In", bn: "লগইন করুন" },
+    signUp: { en: "Sign Up", bn: "অ্যাকাউন্ট তৈরি করুন" },
     pleaseWait: { en: "Please wait...", bn: "অপেক্ষা করুন..." },
-    noAccount: { en: "Don't have an account? Sign up", bn: "অ্যাকাউন্ট নেই? সাইন আপ করুন" },
-    haveAccount: { en: "Already have an account? Sign in", bn: "অ্যাকাউন্ট আছে? সাইন ইন করুন" },
-    backHome: { en: "← Back to home", bn: "← হোমে ফিরুন" },
+    noAccount: { en: "Don't have an account? Sign up", bn: "অ্যাকাউন্ট নেই? নতুন অ্যাকাউন্ট তৈরি করুন" },
+    haveAccount: { en: "Already have an account? Sign in", bn: "অ্যাকাউন্ট আছে? লগইন করুন" },
+    backHome: { en: "← Back to home", bn: "← হোমে ফিরে যান" },
   };
 
   const t = (key: keyof typeof translations) => translations[key][language];
 
   useEffect(() => {
-    // Check if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         checkAndRedirect(session.user.id);
@@ -69,7 +68,7 @@ const Auth = () => {
         if (error) throw error;
 
         if (data.user) {
-          toast({ title: "Welcome back!", description: "Logged in successfully." });
+          toast({ title: "স্বাগতম!", description: "সফলভাবে লগইন হয়েছে।" });
           await checkAndRedirect(data.user.id);
         }
       } else {
@@ -84,8 +83,8 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("already registered")) {
             toast({
-              title: "Account exists",
-              description: "This email is already registered. Please login.",
+              title: "অ্যাকাউন্ট আছে",
+              description: "এই ইমেইলে আগে থেকেই অ্যাকাউন্ট আছে। লগইন করুন।",
               variant: "destructive",
             });
             setIsLogin(true);
@@ -96,8 +95,8 @@ const Auth = () => {
 
         if (data.user) {
           toast({
-            title: "Account created!",
-            description: "You're now logged in.",
+            title: "অ্যাকাউন্ট তৈরি হয়েছে!",
+            description: "আপনি এখন লগইন অবস্থায় আছেন।",
           });
           navigate("/dashboard");
         }
@@ -105,8 +104,8 @@ const Auth = () => {
     } catch (error: any) {
       console.error("Auth error:", error);
       toast({
-        title: "Error",
-        description: error.message || "Authentication failed.",
+        title: "সমস্যা হয়েছে",
+        description: error.message || "লগইন করতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।",
         variant: "destructive",
       });
     } finally {
@@ -120,7 +119,7 @@ const Auth = () => {
       
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">
-          <img src={logo} alt="Asfrnest Solutions" className="h-16 mx-auto mb-4" />
+          <img src={logo} alt="YasDev" className="h-16 mx-auto mb-4" />
           <h1 className="text-2xl font-display font-bold">
             {isLogin ? t("login") : t("signup")}
           </h1>

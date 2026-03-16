@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, User } from "lucide-react";
-import logo from "@/assets/asfrnest-logo.png";
+import logo from "@/assets/yasdev-logo.png";
 import LanguageToggle from "./LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,7 +36,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center gap-2">
-            <img src={logo} alt="Asfrnest Solutions" className="h-10 md:h-12 w-auto" />
+            <img src={logo} alt="YasDev" className="h-10 md:h-12 w-auto" />
           </a>
 
           {/* Desktop Navigation */}
@@ -60,7 +60,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-lg hover:bg-secondary/80 transition-colors text-sm"
               >
                 <User className="w-4 h-4" />
-                Dashboard
+                {t("dashboard")}
               </a>
             ) : (
               <a
@@ -68,7 +68,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-lg hover:bg-secondary/80 transition-colors text-sm"
               >
                 <User className="w-4 h-4" />
-                Login
+                {t("login")}
               </a>
             )}
             <a
@@ -112,7 +112,7 @@ const Navbar = () => {
                   className="flex items-center gap-2 px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm"
                 >
                   <User className="w-4 h-4" />
-                  Dashboard
+                  {t("dashboard")}
                 </a>
               ) : (
                 <a
@@ -121,7 +121,7 @@ const Navbar = () => {
                   className="flex items-center gap-2 px-4 py-2.5 bg-secondary border border-border rounded-lg text-sm"
                 >
                   <User className="w-4 h-4" />
-                  Login
+                  {t("login")}
                 </a>
               )}
               <a

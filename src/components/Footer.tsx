@@ -1,4 +1,4 @@
-import logo from "@/assets/asfrnest-logo.png";
+import logo from "@/assets/yasdev-logo.png";
 import { Mail, Phone, MapPin, Shield } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <img src={logo} alt="Asfrnest Solutions" className="h-12 w-auto mb-4" />
+            <img src={logo} alt="YasDev" className="h-12 w-auto mb-4" />
             <p className="text-muted-foreground text-sm max-w-md">
               {t("footerDesc")}
             </p>
@@ -33,9 +33,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">{t("contactUs")}</h4>
             <div className="space-y-3">
-              <a href="mailto:asfrnest@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
+              <a href="mailto:yasdev.bd@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
                 <Mail className="w-4 h-4" />
-                asfrnest@gmail.com
+                yasdev.bd@gmail.com
               </a>
               <a href="tel:+8801734916497" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm transition-colors">
                 <Phone className="w-4 h-4" />
@@ -43,7 +43,7 @@ const Footer = () => {
               </a>
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
                 <MapPin className="w-4 h-4" />
-                {t("Barisal Sadar")}
+                {t("location")}
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2026 Asfrnest Solutions. {t("allRightsReserved")}
+            © 2026 YasDev. {t("allRightsReserved")}
           </p>
           <div className="flex items-center gap-4">
             <Link to="/auth" className="flex items-center gap-1 text-muted-foreground hover:text-primary text-sm transition-colors">

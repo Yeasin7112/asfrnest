@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,50 +6,50 @@
 
 @layer base {
   :root {
-    --background: 220 20% 4%;
+    --background: 215 30% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 220 18% 8%;
+    --card: 215 25% 10%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 18% 8%;
+    --popover: 215 25% 10%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 220 20% 4%;
+    --primary: 168 75% 42%;
+    --primary-foreground: 215 30% 6%;
 
-    --secondary: 220 15% 15%;
+    --secondary: 215 20% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 15% 12%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 215 20% 13%;
+    --muted-foreground: 215 15% 55%;
 
-    --accent: 30 100% 55%;
-    --accent-foreground: 220 20% 4%;
+    --accent: 195 85% 45%;
+    --accent-foreground: 215 30% 6%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 15%;
-    --ring: 195 100% 50%;
+    --border: 215 20% 18%;
+    --input: 215 20% 15%;
+    --ring: 168 75% 42%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --glow-primary: 195 100% 50%;
-    --glow-accent: 30 100% 55%;
-    --gradient-start: 195 100% 50%;
-    --gradient-end: 30 100% 55%;
+    --glow-primary: 168 75% 42%;
+    --glow-accent: 195 85% 45%;
+    --gradient-start: 210 55% 22%;
+    --gradient-end: 168 75% 42%;
 
-    --sidebar-background: 220 18% 6%;
+    --sidebar-background: 215 25% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 220 20% 4%;
-    --sidebar-accent: 220 15% 15%;
+    --sidebar-primary: 168 75% 42%;
+    --sidebar-primary-foreground: 215 30% 6%;
+    --sidebar-accent: 215 20% 15%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 195 100% 50%;
+    --sidebar-border: 215 20% 18%;
+    --sidebar-ring: 168 75% 42%;
   }
 }
 
@@ -71,7 +71,7 @@
   .gradient-border {
     @apply relative;
     background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
-                linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))) border-box;
+                linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end))) border-box;
     border: 1px solid transparent;
   }
 
@@ -87,9 +87,9 @@
 
   .mesh-gradient {
     background: 
-      radial-gradient(ellipse 80% 50% at 20% 40%, hsl(var(--primary) / 0.15), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 60%, hsl(var(--accent) / 0.1), transparent),
-      radial-gradient(ellipse 50% 30% at 50% 20%, hsl(var(--primary) / 0.08), transparent);
+      radial-gradient(ellipse 80% 50% at 20% 40%, hsl(var(--primary) / 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 60%, hsl(var(--accent) / 0.08), transparent),
+      radial-gradient(ellipse 50% 30% at 50% 20%, hsl(var(--gradient-start) / 0.1), transparent);
   }
 
   .card-hover {
